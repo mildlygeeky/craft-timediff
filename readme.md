@@ -4,8 +4,8 @@ Craft Time Diff brings in the Twig Date Extension.
 
 ## Installation
 
-* Place the **time-diff** folder inside your **craft/plugins/** folder.
-* Go to **settings/plugins** and install time-diff
+* Place the **timediff** folder inside your **craft/plugins/** folder.
+* Go to **settings/plugins** and install timediff
 
 ## Usage
 
