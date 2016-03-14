@@ -13,9 +13,28 @@ The plugin adds the Twig time_diff filter (http://twig.sensiolabs.org/doc/extens
 
 ### Time Diff
 
-Renders the difference between a date and now.
+Renders the difference between a date and now:
 
     {{ post.published_at|time_diff }}
+
+    Outputs "1 day ago" or "in 5 months"
+
+### Translations
+
+Need to translate into other languages? Version 1.1 adds a simplistic delimited string that can be
+split into an array, and uses Craft's built-in translation string where available:
+
+    {{ post.published_at|time_diff_array }}
+
+    Outputs "past|1|day|singular" or "future|5|month|plural"
+
+This could then be turned into an array with Twig's split filter:
+
+    {% set diffArray = post.published_at|time_diff_array|split('|') %}
+
+The array's first element will be either the word "past" or "future" (not translated), the second
+element is the number of units, the third is the unit name (translated if available), and the last
+is the word "plural" or "singular".
 
 ## Credits
 
