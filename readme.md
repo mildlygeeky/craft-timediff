@@ -26,15 +26,14 @@ split into an array, and uses Craft's built-in translation string where availabl
 
     {{ post.published_at|time_diff_array }}
 
-    Outputs "past|1|day|singular" or "future|5|month|plural"
+    Outputs "past|1|day" or "future|5|months" 
 
 This could then be turned into an array with Twig's split filter:
 
     {% set diffArray = post.published_at|time_diff_array|split('|') %}
 
 The array's first element will be either the word "past" or "future" (not translated), the second
-element is the number of units, the third is the unit name (translated if available), and the last
-is the word "plural" or "singular".
+element is the number of units, the third is the unit name (translated in plural or singular if available).
 
 ## Credits
 
