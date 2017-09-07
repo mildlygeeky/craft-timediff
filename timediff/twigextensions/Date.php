@@ -11,13 +11,13 @@ namespace Craft;
  *
  */
 
+use Twig_Environment;
+
 /**
  * @author Robin van der Vleuten <robinvdvleuten@gmail.com>
  */
 class TwigExtensionDate extends \Twig_Extension
 {
-    public $units_translated = array();
-
     static $units = array(
         'y' => 'year',
         'm' => 'month',
@@ -26,18 +26,6 @@ class TwigExtensionDate extends \Twig_Extension
         'i' => 'minute',
         's' => 'second',
     );
-
-    function __construct()
-    {
-        $this->units_translated = array(
-            'y' => Craft::t('year'),
-            'm' => Craft::t('month'),
-            'd' => Craft::t('day'),
-            'h' => Craft::t('hour'),
-            'i' => Craft::t('minute'),
-            's' => Craft::t('second'),
-        );
-    }
 
     /**
      * Returns a list of filters.
@@ -75,7 +63,7 @@ class TwigExtensionDate extends \Twig_Extension
      *
      * @return string The converted time.
      */
-    public function diff(\Twig_Environment $env, $date, $now = null)
+    public function diff(Twig_Environment $env, $date, $now = null)
     {
         // Convert both dates to DateTime instances.
         $date = twig_date_converter($env, $date);
@@ -105,7 +93,7 @@ class TwigExtensionDate extends \Twig_Extension
      *
      * @return string The converted time.
      */
-    public function diff_array(\Twig_Environment $env, $date, $now = null)
+    public function diff_array(Twig_Environment $env, $date, $now = null)
     {
         // Convert both dates to DateTime instances.
         $date = twig_date_converter($env, $date);
@@ -115,7 +103,7 @@ class TwigExtensionDate extends \Twig_Extension
         $diff = $date->diff($now);
 
         // Check for each interval if it appears in the $diff object.
-        foreach ($this->units_translated as $attribute => $unit) {
+        foreach (self::$units as $attribute => $unit) {
             $count = $diff->$attribute;
 
             if (0 !== $count) {
@@ -128,7 +116,6 @@ class TwigExtensionDate extends \Twig_Extension
 
     protected function getPluralizedInterval($count, $invert, $unit)
     {
-
         if ($count > 1) {
             $unit .= 's';
         }
@@ -138,8 +125,11 @@ class TwigExtensionDate extends \Twig_Extension
 
     protected function getPluralizedIntervalArray($count, $invert, $unit)
     {
-        $translateable_array = array($invert ? 'future' : 'past', $count, $unit, $count > 1 ? 'plural' : 'single');
-        return implode('|', $translateable_array);
+        if ($count > 1) {
+            $unit .= 's';
+        }
+
+        return implode('|', array($invert ? 'future' : 'past', $count, Craft::t($unit)));
     }
 
 }
